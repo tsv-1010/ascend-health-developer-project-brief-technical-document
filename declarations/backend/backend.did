@@ -1,0 +1,357 @@
+type http_request_result = 
+ record {
+   body: blob;
+   headers: vec http_header;
+   status: nat;
+ };
+type http_header = 
+ record {
+   name: text;
+   value: text;
+ };
+type WearableConnection = 
+ record {
+   accessToken: text;
+   connectedAt: Time;
+   expiresAt: opt Time;
+   refreshToken: opt text;
+   "service": text;
+ };
+type UserRole = 
+ variant {
+   admin;
+   guest;
+   user;
+ };
+type UserProfile = 
+ record {
+   age: nat;
+   agentName: text;
+   goals: vec text;
+   healthConcerns: vec text;
+   name: text;
+   onboardingComplete: bool;
+   privacyConsent: bool;
+   subscriptionStatus: bool;
+ };
+type UploadStatus = 
+ record {
+   errorMessage: opt text;
+   filePath: text;
+   id: text;
+   progress: nat;
+   status: text;
+   timestamp: Time;
+   userId: principal;
+ };
+type TransformationOutput = 
+ record {
+   body: blob;
+   headers: vec http_header;
+   status: nat;
+ };
+type TransformationInput = 
+ record {
+   context: blob;
+   response: http_request_result;
+ };
+type TourStep = 
+ record {
+   completed: bool;
+   description: text;
+   id: text;
+   order: nat;
+   target: text;
+   title: text;
+ };
+type TourProgress = 
+ record {
+   completed: bool;
+   lastUpdated: Time;
+   steps: vec TourStep;
+   userId: principal;
+ };
+type Time = int;
+type StakingPosition = 
+ record {
+   active: bool;
+   amount: nat;
+   lockupPeriod: nat;
+   rewardMultiplier: nat;
+   startTime: Time;
+   userId: principal;
+ };
+type Reward = 
+ record {
+   amount: nat;
+   dateAwarded: Time;
+   id: text;
+   "type": text;
+ };
+type Referral = 
+ record {
+   code: text;
+   referee: opt principal;
+   referrer: principal;
+   rewardClaimed: bool;
+   timestamp: Time;
+ };
+type QuickAction = 
+ record {
+   action: text;
+   context: text;
+   id: text;
+   lastUsed: Time;
+   usageCount: nat;
+ };
+type PromptSuggestion = 
+ record {
+   context: text;
+   id: text;
+   lastUsed: Time;
+   prompt: text;
+   usageCount: nat;
+ };
+type Product = 
+ record {
+   aiInfo: text;
+   category: text;
+   description: text;
+   id: text;
+   name: text;
+   price: nat;
+   protocol: text;
+   ranking: nat;
+   recommended: bool;
+   vendor: text;
+ };
+type PaymentTransaction = 
+ record {
+   amount: nat;
+   errorMessage: opt text;
+   id: text;
+   paymentMethod: text;
+   status: text;
+   timestamp: Time;
+   userId: principal;
+   vendor: text;
+ };
+type Notification = 
+ record {
+   dateSent: Time;
+   id: text;
+   message: text;
+   read: bool;
+   "type": text;
+ };
+type LiquidityPool = 
+ record {
+   apy: nat;
+   id: text;
+   tokenPair: text;
+   totalLiquidity: nat;
+   volume: nat;
+ };
+type LeaderboardEntry = 
+ record {
+   domain: HealthDomain;
+   score: nat;
+   userId: text;
+ };
+type HelpPreference = 
+ record {
+   completedTutorials: vec text;
+   lastUpdated: Time;
+   showHelp: bool;
+   userId: principal;
+ };
+type HealthRecord = 
+ record {
+   extractedData: opt vec ExtractedField;
+   filePath: text;
+   fileType: text;
+   id: text;
+   reviewStatus: text;
+   status: text;
+   uploadTime: Time;
+   userId: principal;
+ };
+type HealthIndicator = 
+ record {
+   name: text;
+   source: text;
+   timestamp: Time;
+   unit: text;
+   value: nat;
+ };
+type HealthDomain = 
+ variant {
+   community;
+   environment;
+   finances;
+   fitness;
+   longevity;
+   mental;
+   nutrition;
+   purpose;
+ };
+type FileReference = 
+ record {
+   hash: text;
+   path: text;
+ };
+type ExtractedField = 
+ record {
+   confidence: nat;
+   domain: text;
+   fieldName: text;
+   indicator: text;
+   source: text;
+   value: text;
+ };
+type DomainProgress = 
+ record {
+   lastUpdated: Time;
+   score: nat;
+   streak: nat;
+ };
+type DashboardPreference = 
+ record {
+   cardOrder: vec text;
+   hiddenCards: vec text;
+   lastUpdated: Time;
+   notificationPreferences: vec text;
+   userId: principal;
+ };
+type CustomMetric = 
+ record {
+   createdAt: Time;
+   domain: HealthDomain;
+   id: text;
+   name: text;
+   value: nat;
+ };
+type CheckoutSession = 
+ record {
+   cart: vec Product;
+   createdAt: Time;
+   id: text;
+   paymentMethod: text;
+   status: text;
+   totalAmount: nat;
+   updatedAt: Time;
+   userId: principal;
+ };
+type BrandSuggestion = 
+ record {
+   brandName: text;
+   category: text;
+   reason: opt text;
+   reviewed: bool;
+   timestamp: Time;
+   userEmail: text;
+ };
+type Badge = 
+ record {
+   dateEarned: Time;
+   description: text;
+   id: text;
+   name: text;
+ };
+type AgentInteraction = 
+ record {
+   message: text;
+   response: text;
+   timestamp: Time;
+ };
+service : {
+  addAgentInteraction: (interaction: AgentInteraction) -> ();
+  addBadge: (badge: Badge) -> ();
+  addExtractedData: (recordId: text, extractedData: vec ExtractedField) -> ();
+  addHealthIndicator: (indicator: HealthIndicator) -> ();
+  addLeaderboardEntry: (entry: LeaderboardEntry) -> ();
+  addNotification: (notification: Notification) -> ();
+  addProduct: (product: Product) -> ();
+  addReward: (reward: Reward) -> ();
+  assignCallerUserRole: (user: principal, role: UserRole) -> ();
+  claimReferralReward: (code: text) -> ();
+  completeOnboarding: () -> ();
+  connectWearable: ("service": text, accessToken: text, refreshToken:
+   opt text, expiresAt: opt Time) -> ();
+  createCheckoutSession: (cart: vec Product, totalAmount: nat, paymentMethod:
+   text) -> (text);
+  createCustomMetric: (metric: CustomMetric) -> ();
+  createReferral: (code: text) -> ();
+  deleteCheckoutSession: (sessionId: text) -> ();
+  deleteHealthRecord: (recordId: text) -> ();
+  deletePaymentTransaction: (transactionId: text) -> ();
+  deleteProduct: (productId: text) -> ();
+  deleteUploadStatus: (recordId: text) -> ();
+  dropFileReference: (path: text) -> ();
+  getAgentInteractions: () -> (vec AgentInteraction) query;
+  getAllReferrals: () -> (vec Referral) query;
+  getBadges: () -> (vec Badge) query;
+  getBrandSuggestions: () -> (vec BrandSuggestion) query;
+  getCallerUserProfile: () -> (opt UserProfile) query;
+  getCallerUserRole: () -> (UserRole) query;
+  getCheckoutSessionById: (sessionId: text) -> (opt CheckoutSession) query;
+  getCheckoutSessions: () -> (vec CheckoutSession) query;
+  getCustomMetrics: () -> (vec CustomMetric) query;
+  getDashboardPreferences: () -> (opt DashboardPreference) query;
+  getDomainProgress: () -> (vec record {
+                                  HealthDomain;
+                                  DomainProgress;
+                                }) query;
+  getFileReference: (path: text) -> (FileReference) query;
+  getHealthIndicators: () -> (vec HealthIndicator) query;
+  getHealthRecordById: (recordId: text) -> (opt HealthRecord) query;
+  getHealthRecords: () -> (vec HealthRecord) query;
+  getHelpPreferences: () -> (opt HelpPreference) query;
+  getLeaderboard: () -> (vec LeaderboardEntry) query;
+  getLiquidityPools: () -> (vec LiquidityPool) query;
+  getNotifications: () -> (vec Notification) query;
+  getPaymentTransactionById: (transactionId: text) ->
+   (opt PaymentTransaction) query;
+  getPaymentTransactions: () -> (vec PaymentTransaction) query;
+  getProductById: (productId: text) -> (opt Product) query;
+  getProducts: () -> (vec Product) query;
+  getPromptSuggestions: () -> (vec PromptSuggestion) query;
+  getQuickActions: () -> (vec QuickAction) query;
+  getReferral: (code: text) -> (opt Referral) query;
+  getRewards: () -> (vec Reward) query;
+  getStakingPositions: () -> (vec StakingPosition) query;
+  getTourProgress: () -> (opt TourProgress) query;
+  getUploadStatusById: (recordId: text) -> (opt UploadStatus) query;
+  getUploadStatuses: () -> (vec UploadStatus) query;
+  getUserProfile: (user: principal) -> (opt UserProfile) query;
+  getWearableConnections: () -> (vec WearableConnection) query;
+  initializeAccessControl: () -> ();
+  isCallerAdmin: () -> (bool) query;
+  isOnboardingComplete: () -> (bool) query;
+  listFileReferences: () -> (vec FileReference) query;
+  processPayment: (amount: nat, vendor: text, paymentMethod: text) -> (text);
+  registerFileReference: (path: text, hash: text) -> ();
+  saveCallerUserProfile: (profile: UserProfile) -> ();
+  saveDashboardPreferences: (preferences: DashboardPreference) -> ();
+  saveHelpPreferences: (preferences: HelpPreference) -> ();
+  savePromptSuggestions: (suggestions: vec PromptSuggestion) -> ();
+  saveQuickActions: (actions: vec QuickAction) -> ();
+  saveTourProgress: (progress: TourProgress) -> ();
+  stakeTokens: (amount: nat, lockupPeriod: nat) -> ();
+  submitBrandSuggestion: (brandName: text, category: text, reason: opt text,
+   userEmail: text) -> ();
+  transform: (input: TransformationInput) -> (TransformationOutput) query;
+  unstakeTokens: (positionIndex: nat) -> ();
+  updateCheckoutSession: (sessionId: text, updatedSession:
+   CheckoutSession) -> ();
+  updateDomainProgress: (domain: HealthDomain, progress: DomainProgress) ->
+   ();
+  updateLiquidityPools: () -> ();
+  updatePaymentTransaction: (transactionId: text, updatedTransaction:
+   PaymentTransaction) -> ();
+  updateProduct: (productId: text, updatedProduct: Product) -> ();
+  updateReviewStatus: (recordId: text, reviewStatus: text) -> ();
+  updateUploadStatus: (recordId: text, status: text, progress: nat,
+   errorMessage: opt text) -> ();
+  uploadHealthRecord: (filePath: text, fileType: text) -> (text);
+}

@@ -1,0 +1,41 @@
+
+### Environment Configuration
+
+The application automatically configures itself for local development. For production deployment, ensure proper canister IDs and network settings are configured.
+
+## 🌐 Browser Compatibility
+
+- **Voice Features**: Chrome, Edge, Safari (with permissions)
+- **Modern Browsers**: Full feature support
+- **Fallbacks**: Graceful degradation for unsupported features
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Add tests if applicable
+5. Submit a pull request
+
+## 📝 License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## 🆘 Support
+
+For issues and questions:
+1. Check the browser console for error messages
+2. Ensure dfx is running (`dfx start`)
+3. Verify Internet Identity is accessible
+4. Check network connectivity
+
+## 🔄 Deployment Status
+
+- **Local Development**: ✅ Ready
+- **IC Testnet**: 🔄 In Progress
+- **IC Mainnet**: 📋 Planned
+- **Mobile Apps**: 📋 Planned
+
+---
+
+**Note**: This application is optimized for fast loading (<2s) and provides comprehensive error handling for all integration points. Future features are clearly marked in the codebase for easy integration.
